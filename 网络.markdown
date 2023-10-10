@@ -1,0 +1,24 @@
+
+
+### 术语解析
+- ifconfig 中的if是interface的简写，所以ifconfig指：接口配置，这里的接口就是网络接口
+- eth/eth0：物理网卡一般现实为eth0，其中eth指ethernet(以太网)；在 VirtualBox 虚拟机中以 enp 开头
+- veth：虚拟以太网设备，即指虚拟的网卡，veth一般是成对出现(即有偶数个虚拟网卡)；我们可以将veth理解成一根网线，网线必然是有两端的。而veth的作用也和网线一致。
+- bridge 桥设备，即一个软件实现的交换机或者路由器，名字一般以 br 开头，如 br0。
+- tun/tap （network TUNnel / network TAP）。
+- ipvlan/macvlan 虚拟设备。
+- vxlan 虚拟设备。
+- bridge 网桥
+- netfilter是linux的安全框架，位于内核空间：具有如下功能
+  - nat Network Address Translate 网络地址转换
+  - 数据包的修改
+  - 数据包的过滤
+- iptables可以用来对netfilter进行配置管理，位于用户空间
+
+
+
+
+
+参考：
+> 字节跳动内网iptables：https://bytetech.info/articles/7017730835797245982
+> iptables/netfilter相关: https://www.zsythink.net/archives/1199
