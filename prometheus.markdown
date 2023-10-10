@@ -54,25 +54,19 @@ rpc_duration_seconds{quantile="0.01"} 3102
 rpc_duration_seconds_sum 1.7560473e+07
 rpc_duration_seconds_count 2693
 ```
-[OpenMetrics](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md)格式，OpenMetrics的优势在于，增加了对exemplar()
+[OpenMetrics](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md)格式。OpenMetrics支持开发者手动标明数据时间戳(虽然不推荐)。同时支持exemplar，exemplar是用于关联以trace为主的非时序数据。
 如下
 ```
-# TYPE acme_http_router_request_seconds summary
-# UNIT acme_http_router_request_seconds seconds
-# HELP acme_http_router_request_seconds Latency though all of ACME's HTTP request router.
-acme_http_router_request_seconds_sum{path="/api/v1",method="GET"} 9036.32
-acme_http_router_request_seconds_count{path="/api/v1",method="GET"} 807283.0
-acme_http_router_request_seconds_created{path="/api/v1",method="GET"} 1605281325.0
-# TYPE go_goroutines gauge
-# HELP go_goroutines Number of goroutines that currently exist.
-go_goroutines 69
-# TYPE process_cpu_seconds counter
-# UNIT process_cpu_seconds seconds
-# HELP process_cpu_seconds Total user and system CPU time spent in seconds.
-process_cpu_seconds_total 4.20072246e+06
-# EOF
+# TYPE foo histogram
+foo_bucket{le="0.01"} 0
+foo_bucket{le="0.1"} 8 # {} 0.054
+foo_bucket{le="1"} 11 # {trace_id="KOO5S4vxi0o"} 0.67
+foo_bucket{le="10"} 17 # {trace_id="oHg5SJYRHA0"} 9.8 1520879607.789
+foo_bucket{le="+Inf"} 17
+foo_count 17
+foo_sum 324789.3
+foo_created  1520430000.123
 ```
-
 
 ##### Exporter
 - exporter服务适合不提供第三方接口的服务，例如[虚拟机、数据库，存储，队列等](https://prometheus.io/docs/instrumenting/exporters/)。exporter又叫探针或导出器，特只本身并不是监控对象、专门通过各种手段从不提供metrics Api的服务那里获取数据，然后转成metrics Api的格式暴露出来的服务。
@@ -104,7 +98,7 @@ TSDB即Prometheus存储数据的数据库。
 #### 3.3 数据查询展示
 
 Prometheus有一套自己的数据查询语言，PromQL(Prometheus Query Language)，所有的query api都基于PromQL。
-Prometheus自带的前端在http://localhost:9090，用来执行query，查看指标等。但一般社区中使用[Grafana](https://grafana.com/)来作为前端。
+Prometheus自带的前端在`http://localhost:9090`，用来执行query，查看指标等。但一般社区中使用[Grafana](https://grafana.com/)来作为前端。
 
 #### 3.4 告警引擎
 
@@ -199,6 +193,7 @@ up{instance="localhost:9090", job="prometheus"}   up 值 =1，表示采样点所
 
 
 
+### 引用
 > https://github.com/lichuan0620/k8s-sre-learning-notes/blob/master/prometheus/PROM-101.md
 > https://www.volcengine.com/docs/6731/177124
 > [Prometheus: Up & Running](https://www.oreilly.com/library/view/prometheus-up/9781492034131/)
